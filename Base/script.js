@@ -53,13 +53,73 @@ function incrementNeighbors(row, col) {
    }
 };
 
+function uncover(id) {
+   var queue = new Array();
+   var at;
+   var numMines;
+   var space;
+
+   queue.push([Math.floor(id / numCols), id % numCols]);
+   while(queue.length > 0) {
+      at = queue.shift();
+      numMines = grid[at[0]][at[1]];
+      space = document.getElementById((at[0] * numCols) + at[1]);
+
+      if(space.classList.contains('uncovered')) {
+         continue;
+      }
+
+      space.classList.add('uncovered');
+      if(numMines > 0) {
+         space.innerHTML = numMines.toString();
+         space.classList.add('tc' + numMines);
+      }
+      else if(numMines === -1) {
+         space.classList.add('mine-clicked');
+      }
+
+      if(numMines === 0) {
+         if(checkBounds(at[0]-1, at[1]-1)) {
+            queue.push([at[0]-1, at[1]-1]);
+         }
+         if(checkBounds(at[0]-1, at[1])) {
+            queue.push([at[0]-1, at[1]]);
+         }
+         if(checkBounds(at[0]-1, at[1]+1)) {
+            queue.push([at[0]-1, at[1]+1]);
+         }
+         if(checkBounds(at[0], at[1]+1)) {
+            queue.push([at[0], at[1]+1]);
+         }
+         if(checkBounds(at[0]+1, at[1]+1)) {
+            queue.push([at[0]+1, at[1]+1]);
+         }
+         if(checkBounds(at[0]+1, at[1])) {
+            queue.push([at[0]+1, at[1]]);
+         }
+         if(checkBounds(at[0]+1, at[1]-1)) {
+            queue.push([at[0]+1, at[1]-1]);
+         }
+         if(checkBounds(at[0], at[1]-1)) {
+            queue.push([at[0], at[1]-1]);
+         }
+      }
+   }
+}
+
+function checkBounds(row, col) {
+   return (row < numRows) 
+       && (row >= 0)
+       && (col < numCols)
+       && (col >= 0);
+}
+
 
 const spaces = document.querySelectorAll('.space');
 let id = 0;
 spaces.forEach((space) => {
    space.id = id++;
    space.addEventListener('click', () => {
-      space.classList.add('uncovered');
-      space.innerHTML = '' + grid[Math.floor(space.id / numCols)][space.id % numCols];
+      uncover(space.id);
    });
 });

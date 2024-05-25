@@ -54,4 +54,36 @@ body {
 }
    .space.uncovered {
       border : none;
+      border-bottom : 2px solid rgb(134,134,134);
+      border-right : 2px solid rgb(134,134,134);
    }
+
+.mine-clicked {
+   background-image : url(./mine.gif);
+   background-size : cover;
+   background-repeat : no-repeat;
+}
+.tc1 {
+   color : rgb(0,0,255);
+}
+.tc2 {
+   color : rgb(0,123,0);
+}
+.tc3 {
+   color : rgb(255,0,0);
+}
+.tc4 {
+   color : rgb(0,0,123);
+}
+.tc5 {
+   color : rgb(123,0,0);
+}
+.tc6 {
+   color : rgb(0,123,123);
+}
+.tc7 {
+   color : rgb(0,0,0);
+}
+.tc8 {
+   color : rgb(123,123,123);
+}
