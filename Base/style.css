@@ -59,10 +59,17 @@ body {
    }
 
 .mine-clicked {
-   background-image : url(./mine.gif);
+   background-image : url(./mine-clicked.gif);
    background-size : cover;
    background-repeat : no-repeat;
 }
+
+.flag {
+   background-image : url(./flag.jpg);
+   background-size : cover;
+   background-repeat : no-repeat;
+}
+
 .tc1 {
    color : rgb(0,0,255);
 }

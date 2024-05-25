@@ -65,7 +65,8 @@ function uncover(id) {
       numMines = grid[at[0]][at[1]];
       space = document.getElementById((at[0] * numCols) + at[1]);
 
-      if(space.classList.contains('uncovered')) {
+      if(space.classList.contains('uncovered')
+      || space.classList.contains('flag')) {
          continue;
       }
 
@@ -107,6 +108,13 @@ function uncover(id) {
    }
 }
 
+function toggleFlag(id) {
+   let space = document.getElementById(id);
+   if(!space.classList.contains('uncovered')) {
+      space.classList.toggle('flag');
+   }
+}
+
 function checkBounds(row, col) {
    return (row < numRows) 
        && (row >= 0)
@@ -122,4 +130,7 @@ spaces.forEach((space) => {
    space.addEventListener('click', () => {
       uncover(space.id);
    });
+   space.addEventListener('contextmenu', () => {
+      toggleFlag(space.id);
+   })
 });
