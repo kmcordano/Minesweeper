@@ -125,6 +125,26 @@ function uncover(event) {
          }
       }
    }
+
+   if(allUncovered()) {
+      endGame(true);
+   }
+}
+
+function allUncovered() {
+   let completed = true
+   spaces.forEach((space) => {
+      if(!space.classList.contains('flag')
+      && !space.classList.contains('uncovered')) {
+         completed = false;
+      }
+   });
+
+   if(mineTracker !== 0) {
+      completed = false;
+   }
+
+   return completed;
 }
 
 function incrementMines() {
@@ -135,7 +155,7 @@ function incrementMines() {
 function decrementMines() {
    mineTracker--;
    $mineCount.innerHTML = mineTracker;
-}
+};
 
 function toggleFlag(event) {
    var id = event.target.id;
@@ -149,6 +169,10 @@ function toggleFlag(event) {
          space.classList.add('flag');
          decrementMines();
       }
+   }
+
+   if(allUncovered()) {
+      endGame(true);
    }
 }
 
