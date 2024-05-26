@@ -15,8 +15,11 @@ for(let i = 0; i < NUM_ROWS; i++) {
 
 var row, col;
 for(let i = 0; i < NUM_MINES; i++) {
-   row = getRandomInt(NUM_ROWS);
-   col = getRandomInt(NUM_COLS);
+   do {
+      row = getRandomInt(NUM_ROWS);
+      col = getRandomInt(NUM_COLS);
+   }
+   while(grid[row][col] == -1);
 
    grid[row][col] = -1;
    incrementNeighbors(row, col);
@@ -25,7 +28,7 @@ for(let i = 0; i < NUM_MINES; i++) {
 $mineCount.innerHTML = NUM_MINES;
 $timer.innerHTML = time;
 
-setInterval(() => {
+let Timer = setInterval(() => {
    time++;
    $timer.innerHTML = time;
 }, 1000);
@@ -35,7 +38,10 @@ function getRandomInt(max) {
 };
 
 function incrementNeighbors(row, col) {
-   if(checkBounds(row-1, col) && grid[row-1][col] != -1) {
+   if(checkBounds(row-1, col-1) && grid[row-1][col-1] != -1) {
+      grid[row-1][col-1]++;
+   }
+      if(checkBounds(row-1, col) && grid[row-1][col] != -1) {
       grid[row-1][col]++;
    }
 
@@ -62,13 +68,10 @@ function incrementNeighbors(row, col) {
    if(checkBounds(row, col-1) && grid[row][col-1] != -1) {
       grid[row][col-1]++;
    }
-
-   if(checkBounds(row-1, col-1) && grid[row-1][col-1] != -1) {
-      grid[row-1][col-1]++;
-   }
 };
 
-function uncover(id) {
+function uncover(event) {
+   var id = event.target.id;
    var queue = new Array();
    var at;
    var numMines;
@@ -92,6 +95,7 @@ function uncover(id) {
       }
       else if(numMines === -1) {
          space.classList.add('mine-clicked');
+         endGame(false);
       }
 
       if(numMines === 0) {
@@ -124,26 +128,20 @@ function uncover(id) {
 }
 
 function incrementMines() {
-   if(mineTracker >= NUM_MINES) {
-      return;
-   }
    mineTracker++;
    $mineCount.innerHTML = mineTracker;
 }
 
 function decrementMines() {
-   if(mineTracker <= 0) {
-      return;
-   }
    mineTracker--;
    $mineCount.innerHTML = mineTracker;
 }
 
-function toggleFlag(id) {
+function toggleFlag(event) {
+   var id = event.target.id;
    let space = document.getElementById(id);
    if(!space.classList.contains('uncovered')) {
-      // space.classList.toggle('flag');
-      if(space.classList.contains('flag')) {
+      if(space.classList.contains('flag')) { 
          space.classList.remove('flag');
          incrementMines();
       }
@@ -161,15 +159,42 @@ function checkBounds(row, col) {
        && (col >= 0);
 }
 
+function endGame(won) {
+   clearInterval(Timer);
+   $result = document.querySelector('.result');
+   if(won) {
+      $result.classList.add('win');
+      $result.innerHTML = "WIN";      
+   }
+   else {
+      $result.classList.add('loss');
+      $result.innerHTML = "LOSS";
+      uncoverMines();
+   }
+   clearClickListeners();
+};
+
+function uncoverMines() {
+   spaces.forEach((space) => {
+      if(grid[Math.floor(space.id / NUM_COLS)][space.id % NUM_COLS] == -1) {
+         space.classList.remove('flag');
+         space.classList.add('uncovered');
+         space.classList.add('mine');
+      }
+   });
+};
+
+function clearClickListeners() {
+   spaces.forEach((space) => {
+      space.removeEventListener('click', uncover);
+      space.removeEventListener('contextmenu', toggleFlag);
+   });
+}
 
 const spaces = document.querySelectorAll('.space');
 let id = 0;
 spaces.forEach((space) => {
    space.id = id++;
-   space.addEventListener('click', () => {
-      uncover(space.id);
-   });
-   space.addEventListener('contextmenu', () => {
-      toggleFlag(space.id);
-   })
+   space.addEventListener('click', uncover);
+   space.addEventListener('contextmenu', toggleFlag);
 });

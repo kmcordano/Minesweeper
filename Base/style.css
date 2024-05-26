@@ -33,15 +33,22 @@ body {
    align-items : center;
 }
 
-.mine-count, .timer{
+.mine-count, .timer, .result {
    width : 30%;
    height : 60%;
-   border : 1px solid;
    margin : 0 3%;
 
    display : flex;
    align-items : center;
    justify-content: center;;
+}
+
+.win {
+   color : green;
+}
+
+.loss {
+   color : red;
 }
 
 .mine-field {
@@ -66,12 +73,21 @@ body {
    display : flex;
    align-items : center;
    justify-content : center;
+
+   cursor : pointer;
 }
    .space.uncovered {
+      cursor : default;
       border : none;
       border-bottom : 2px solid rgb(134,134,134);
       border-right : 2px solid rgb(134,134,134);
    }
+
+.mine {
+   background-image : url(./mine.gif);
+   background-size : cover;
+   background-repeat : no-repeat;
+}
 
 .mine-clicked {
    background-image : url(./mine-clicked.gif);
