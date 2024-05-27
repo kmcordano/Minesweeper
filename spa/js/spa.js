@@ -4,8 +4,10 @@
  */
 
 let spa = (function() {
+   'use strict';
+
    const initModule = ($container) => {
-      $container.innerHTML = "Hello World!";
+      spa.shell.initModule($container);
    };
 
    return {

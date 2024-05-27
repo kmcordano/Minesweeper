@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+
+<html>
+   <head>
+      <title>HTML Layout</title>
+      <link rel="stylesheet" href="./css/spa.css" type="text/css">
+
+      <style>
+         .spa-shell-header,
+         .spa-shell-header-logo,
+         .spa-shell-header-acct,
+         .spa-shell-main,
+         .spa-shell-main-nav,
+         .spa-shell-main-content,
+         .spa-shell-footer {
+            border : 1px solid black
+         }
+
+         #spa {
+            display : flex;
+            flex-direction : column;
+         }
+
+         .spa-shell-header {
+            display : flex;
+            justify-content : space-between;
+
+            height : clamp(50px, 10%, 100px);
+         }
+
+         .spa-shell-main {
+            display : flex;
+            flex-grow : 1;
+         }
+
+         .spa-shell-main-nav {
+            width : clamp(100px, 20%, 250px);
+         }
+
+         .spa-shell-main-content {
+            flex-grow : 1;
+         }
+
+         .spa-shell-footer {
+            height : clamp(50px, 10%, 100px);
+         }
+      </style>
+   </head>
+
+   <body>
+      <div id="spa">
+         <div class="spa-shell-header">
+            <div class="spa-shell-header-logo">Logo</div>
+            <div class="spa-shell-header-acct">Acct</div>
+         </div>
+         <div class="spa-shell-main">
+            <div class="spa-shell-main-nav">Nav</div>
+            <div class="spa-shell-main-content">Content</div>
+         </div>
+         <div class="spa-shell-footer">
+            Footer
+         </div>
+      </div>
+   </body>
+</html>
