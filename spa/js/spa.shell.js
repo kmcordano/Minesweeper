@@ -37,8 +37,11 @@ spa.shell = (function() {
    // Begin DOM method /setElementMap/
    setElementMap = () => {
       let $container = stateMap.$container;
+      let $main_content = $container.querySelector('.spa-shell-main-content');
+
       elementMap = {
-         $container : $container
+         $container : $container,
+         $main_content : $main_content
       };
    };
    // End DOM method /setElementMap/
@@ -59,6 +62,8 @@ spa.shell = (function() {
       stateMap.$container= $container;
       $container.innerHTML = configMap.main_html;
       setElementMap();
+
+      spa.minesweeper.initModule(elementMap.$main_content);
    };
    // End public method /initModule/
 

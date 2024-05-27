@@ -1,0 +1,142 @@
+/*
+ * spa.minesweeper.css
+ * Minesweeper feature styles
+ */
+
+@font-face {
+   font-family : 'Minesweeper';
+   src         : url('../font/mine-sweeper.ttf');
+}
+
+:root {
+   --darkBorderColor : rgb(134,134,134);
+   --bgGray : rgb(189,189,189);
+}
+
+.container {
+   display : flex;
+   flex-direction : column;
+   align-items : center;
+
+   width : 100%;
+   height : 100%;
+
+   font-family : 'Minesweeper';
+}
+
+.gameboard {
+   border              : 0.25em solid #eee;
+   border-right-color  : var(--darkBorderColor);
+   border-bottom-color : var(--darkBorderColor);
+
+   background-color : var(--bgGray);
+
+   padding : 0.5em;
+}
+
+.scoreboard {
+   height : 3em;
+   border : 0.25em solid #eee;
+   border-top-color : var(--darkBorderColor);
+   border-left-color : var(--darkBorderColor);
+   margin-bottom : 0.5em;
+
+   display : flex;
+   justify-content : space-between;
+   align-items : center;
+}
+
+.mine-count,
+.result,
+.timer {
+   width : 30%;
+   height : 60%;
+   margin : 0 3%;
+
+   display : flex;
+   align-items : center;
+   justify-content : center;
+}
+
+.win {
+   color : rgb(0,128,0);
+}
+
+.loss {
+   color : rgb(255,0,0);
+}
+
+.mine-field {
+   border : 0.25em solid #eee;
+   border-top-color : var(--darkBorderColor);
+   border-left-color : var(--darkBorderColor);
+
+   display : grid;
+   grid-template-rows : repeat(5, 1fr);
+   grid-template-columns : repeat(5, 1fr);
+}
+
+.space {
+   width : 2em;
+   height : 2em;
+
+   border : 0.25em solid #eee;
+   border-right-color : var(--darkBorderColor);
+   border-bottom-color : var(--darkBorderColor);
+   background-color : var(--bgGray);
+
+   box-sizing : border-box;
+
+   display : flex;
+   align-items : center;
+   justify-content : center;
+
+   cursor : pointer;
+}
+   .space.uncovered {
+      cursor : default;
+      border : none;
+      border-bottom : 2px solid var(--darkBorderColor);
+      border-right : 2px solid var(--darkBorderColor);
+   }
+
+.flag,
+.mine,
+.mine-clicked {
+   background-size : cover;
+   background-repeat : no-repeat;
+}
+   .flag {
+      background-image : url(../img/flag.jpg);
+   }
+   .mine {
+      background-image : url(../img/mine.jpg);
+   }
+   .mine-clicked {
+      background-image : url(../img/mine-clicked.jpg);
+   }
+
+.tc1 {
+   color : rgb(0,0,255);
+}
+.tc2 {
+   color : rgb(0,123,0);
+}
+.tc3 {
+   color : rgb(255,0,0);
+}
+.tc4 {
+   color : rgb(0,0,123);
+}
+.tc5 {
+   color : rgb(123,0,0);
+}
+.tc6 {
+   color : rgb(0,123,123);
+}
+.tc7 {
+   color : rgb(0,0,0);
+}
+.tc8 {
+   color : rgb(123,123,123);
+}
