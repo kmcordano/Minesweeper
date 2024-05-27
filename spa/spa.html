@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+
+<html>
+   <head>
+      <title>GameSuite</title>
+
+      <!-- Stylesheets -->
+      <link rel="stylesheet" href="./css/spa.css" type="text/css">
+      <link rel="stylesheet" href="./css/spa.shell.css" type="text/css">
+
+      <!-- Scripts -->
+      <script src="./js/spa.js"></script>
+      <script src="./js/spa.shell.js"></script>
+      <script>
+         document.addEventListener('DOMContentLoaded', () => {
+            spa.initModule(document.querySelector('#spa'));
+         });
+      </script>
+   </head>
+
+   <body>
+      <div id="spa"></div>
+   </body>
+</html>
