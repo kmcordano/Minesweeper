@@ -13,7 +13,7 @@
    --bgGray : rgb(189,189,189);
 }
 
-.container {
+.spa-minesweeper-container {
    display : flex;
    flex-direction : column;
    align-items : center;
@@ -24,7 +24,7 @@
    font-family : 'Minesweeper';
 }
 
-.gameboard {
+.spa-minesweeper-gameboard {
    border              : 0.25em solid #eee;
    border-right-color  : var(--darkBorderColor);
    border-bottom-color : var(--darkBorderColor);
@@ -34,7 +34,7 @@
    padding : 0.5em;
 }
 
-.scoreboard {
+.spa-minesweeper-scoreboard {
    height : 3em;
    border : 0.25em solid #eee;
    border-top-color : var(--darkBorderColor);
@@ -46,9 +46,9 @@
    align-items : center;
 }
 
-.mine-count,
-.result,
-.timer {
+.spa-minsweeper-scoreboard-mine-count,
+.spa-minsweeper-scoreboard-result,
+.spa-minsweeper-scoreboard-timer {
    width : 30%;
    height : 60%;
    margin : 0 3%;
@@ -66,7 +66,7 @@
    color : rgb(255,0,0);
 }
 
-.mine-field {
+.spa-minesweeper-mine-field {
    border : 0.25em solid #eee;
    border-top-color : var(--darkBorderColor);
    border-left-color : var(--darkBorderColor);
@@ -76,7 +76,7 @@
    grid-template-columns : repeat(5, 1fr);
 }
 
-.space {
+.spa-minesweeper-mine-field-space {
    width : 2em;
    height : 2em;
 
@@ -93,50 +93,50 @@
 
    cursor : pointer;
 }
-   .space.uncovered {
+   .spa-minesweeper-mine-field-space.spa-minesweeper-uncovered {
       cursor : default;
       border : none;
       border-bottom : 2px solid var(--darkBorderColor);
       border-right : 2px solid var(--darkBorderColor);
    }
 
-.flag,
-.mine,
-.mine-clicked {
+.spa-minesweeper-flag,
+.spa-minesweeper-mine,
+.spa-minesweeper-mine-clicked {
    background-size : cover;
    background-repeat : no-repeat;
 }
-   .flag {
+   .spa-minesweeper-flag {
       background-image : url(../img/flag.jpg);
    }
-   .mine {
+   .spa-minesweeper-mine {
       background-image : url(../img/mine.jpg);
    }
-   .mine-clicked {
+   .spa-minesweeper-mine-clicked {
       background-image : url(../img/mine-clicked.jpg);
    }
 
-.tc1 {
+.spa-minesweeper-tc1 {
    color : rgb(0,0,255);
 }
-.tc2 {
+.spa-minesweeper-tc2 {
    color : rgb(0,123,0);
 }
-.tc3 {
+.spa-minesweeper-tc3 {
    color : rgb(255,0,0);
 }
-.tc4 {
+.spa-minesweeper-tc4 {
    color : rgb(0,0,123);
 }
-.tc5 {
+.spa-minesweeper-tc5 {
    color : rgb(123,0,0);
 }
-.tc6 {
+.spa-minesweeper-tc6 {
    color : rgb(0,123,123);
 }
-.tc7 {
+.spa-minesweeper-tc7 {
    color : rgb(0,0,0);
 }
-.tc8 {
+.spa-minesweeper-tc8 {
    color : rgb(123,123,123);
 }
