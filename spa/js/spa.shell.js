@@ -37,7 +37,8 @@ spa.shell = (function() {
    // Begin DOM method /setElementMap/
    setElementMap = () => {
       let $container = stateMap.$container;
-      let $main_content = $container.querySelector('.spa-shell-main-content');
+      let $main_content = $container
+         .querySelector('.spa-shell-main-content');
 
       elementMap = {
          $container : $container,
@@ -58,11 +59,27 @@ spa.shell = (function() {
    // -------- BEGIN PUBLIC METHODS -------- //
 
    // Begin public method /initModule/
+   // Example   : 
+   //    + spa.shell.initModule(document.querySelector('#div'))
+   // Purpose   : directs the shell to offer its capability to the user
+   // Arguments :
+   //    + $container - HTML element to act as shell container
+   // Action    :
+   //    + populates $container with shell contents
+   //    + configures and initializes feature modules
+   // Returns   : none
+   // Throws    : none
    initModule = ($container) => {
       stateMap.$container= $container;
       $container.innerHTML = configMap.main_html;
       setElementMap();
 
+      // configure and initialize feature modules
+      spa.minesweeper.configModule({
+         mineFieldNumRows  : 9,
+         mineFieldNumCols  : 9,
+         mineFieldNumMines : 10
+      });
       spa.minesweeper.initModule(elementMap.$main_content);
    };
    // End public method /initModule/

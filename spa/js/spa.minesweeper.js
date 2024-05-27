@@ -48,9 +48,18 @@ spa.minesweeper = (function() {
                +'</div>'
             + '</div>'
          + '</div>',
-      settableMap : {}
+      settableMap : {
+         mineFieldNumRows  : true,
+         mineFieldNumCols  : true,
+         mineFieldNumMines : true
+      },
+      mineFieldNumRows  : 9,
+      mineFieldNumCols  : 9,
+      mineFieldNumMines : 10
    };
-   let stateMap = { $container : null };
+   let stateMap = { 
+      $container : null,
+   };
    let elementMap = {};
    // End Maps/Objects
    
@@ -92,11 +101,11 @@ spa.minesweeper = (function() {
    // -------- BEGIN PUBLIC METHODS -------- //
 
    // Begin public method /configModule/
-   // Purpose   : adjust confif of allowed keys
+   // Purpose   : adjust config of allowed keys
    // Arguments : a map of settable keys and values
-   //    + numRows  - number of rows in mine field
-   //    + numCols  - number of columns in mine field
-   //    + numMines - number of mines in mine field
+   //    + mineFieldNumRows  - number of rows in mine field
+   //    + mineFieldNumCols  - number of columns in mine field
+   //    + mineFieldNumMines - number of mines in mine field
    // Settings  :
    //    + configMap.settableMap declares allowed keys
    // Returns   : true
