@@ -40,6 +40,7 @@ spa.minesweeper = (function() {
    
    // Methods
    let setElementMap;
+   let populateMineField;
    let initModule;
    let configModule;
    // End Methods
@@ -66,6 +67,29 @@ spa.minesweeper = (function() {
       };
    };
    // End DOM method /setElementMap/
+
+   // Begin DOM method /populateMineField/
+   populateMineField = () => {
+      let $mine_space;
+
+      // Set mine field row and cols
+      elementMap.$mine_field.style.gridTemplateRows 
+         = `repeat(${configMap.mineFieldNumRows}, 1fr)`;
+      elementMap.$mine_field.style.gridTemplateColumns
+         = `repeat(${configMap.mineFieldNumCols}, 1fr)`;
+
+      // Fill mine field with spaces
+      for(let i = 0; 
+          i < configMap.mineFieldNumCols * configMap.mineFieldNumRows;
+          i++) {
+            $mine_space = document.createElement('div');
+            $mine_space.classList
+               .add('spa-minesweeper-mine-field-space');
+
+            elementMap.$mine_field.appendChild($mine_space);
+      }
+   };
+   // End DOM method /populateMineField/
    
    // -------- END DOM METHODS -------- //
 
@@ -106,29 +130,11 @@ spa.minesweeper = (function() {
    // Returns   : true
    // Throws    : none
    initModule = ($container) => {
-      let $mine_space;
-
       stateMap.$container = $container;
       $container.innerHTML = configMap.mainHtml;
       setElementMap();
 
-      // Set mine field row and cols
-      elementMap.$mine_field.style.gridTemplateRows 
-         = `repeat(${configMap.mineFieldNumRows}, 1fr)`;
-      elementMap.$mine_field.style.gridTemplateColumns
-         = `repeat(${configMap.mineFieldNumCols}, 1fr)`;
-
-      // Fill mine field with spaces
-      for(let i = 0; 
-          i < configMap.mineFieldNumCols * configMap.mineFieldNumRows;
-          i++) {
-            //'<div class="spa-minesweeper-mine-field-space"></div>'
-            $mine_space = document.createElement('div');
-            $mine_space.classList
-               .add('spa-minesweeper-mine-field-space');
-
-            elementMap.$mine_field.appendChild($mine_space);
-     }
+      populateMineField();
 
       return true;
    };
