@@ -15,9 +15,9 @@ spa.minesweeper = (function() {
             + '<h1>MineSweeper</h1>'
             + '<div class="spa-minesweeper-gameboard">'
                + '<div class="spa-minesweeper-scoreboard">'
-                  + '<div class="spa-minsweeper-scoreboard-mine-count"></div>'
-                  + '<div class="spa-minsweeper-scoreboard-result"></div>'
-                  + '<div class="spa-minsweeper-scoreboard-timer"></div>'
+                  + '<div class="spa-minesweeper-scoreboard-mine-count"></div>'
+                  + '<div class="spa-minesweeper-scoreboard-result"></div>'
+                  + '<div class="spa-minesweeper-scoreboard-timer"></div>'
                + '</div>'
                + '<div class="spa-minesweeper-mine-field">'
                +'</div>'
@@ -50,6 +50,7 @@ spa.minesweeper = (function() {
    let checkBounds;
    let initModule;
    let configModule;
+   let timer;
    // End Methods
 
    // -------- END MODULE SCOPE VARIABLES -------- //
@@ -153,15 +154,6 @@ spa.minesweeper = (function() {
          $mine_count : $mine_count,
          $mine_field : $mine_field
       };
-
-      for(let $element in elementMap) {
-         if(!$element) {
-            throw(spa.util.makeError(
-               'Bad element',
-               `Element ${$element} could not be found`
-            ));
-         }
-      }
    };
    // End DOM method /setElementMap/
 
@@ -193,6 +185,14 @@ spa.minesweeper = (function() {
    
    
    // -------- BEGIN EVENT HANDLERS -------- //
+
+   // Begin Interval /timer/
+   timer = setInterval(() => {
+      stateMap.gameTime++;
+      elementMap.$timer.innerHTML = stateMap.gameTime;
+   }, 1000);
+   // End Interval /timer/
+
    // -------- END EVENT HANDLERS -------- //
 
    
