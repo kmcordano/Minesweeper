@@ -33,14 +33,21 @@ spa.minesweeper = (function() {
       mineFieldNumMines : 10
    };
    let stateMap = { 
-      $container : null
+      $container : null,
+      gameTime   : undefined,
+      mineCount  : undefined,
+      mineGrid   : undefined
    };
    let elementMap = {};
    // End Maps/Objects
    
    // Methods
    let setElementMap;
-   let populateMineField;
+   let createMineSpaces;
+   let populateMineGrid;
+   let getRandomInt;
+   let incrementNeighbors;
+   let checkBounds;
    let initModule;
    let configModule;
    // End Methods
@@ -50,6 +57,77 @@ spa.minesweeper = (function() {
 
 
    // -------- BEGIN UTILITY METHODS -------- //
+   
+   // Begin Utility /populateMineGrid/
+   populateMineGrid = () => {
+      let i;
+      let row;
+      let col;
+      
+      stateMap.mineGrid = new Array(configMap.mineFieldNumRows);
+      for(i = 0; i < configMap.mineFieldNumRows; i++) {
+         stateMap.mineGrid[i] = new Array(configMap.mineFieldNumCols).fill(0);
+      }
+
+      for(i = 0; i < configMap.mineFieldNumMines; i++) {
+         do {
+            row = getRandomInt(configMap.mineFieldNumRows);
+            col = getRandomInt(configMap.mineFieldNumCols);
+         }
+         while (stateMap.mineGrid[row][col] === -1);
+
+         stateMap.mineGrid[row][col] = -1;
+         incrementNeighbors(row, col);
+      }
+
+      console.log(stateMap.mineGrid);
+   };
+   // End Utility /populateMineGrid/
+
+   // Begin Utility /incrementNeighbors/
+   incrementNeighbors = (row, col) => {
+      if(checkBounds(row-1, col-1) && stateMap.mineGrid[row-1][col-1] != -1) {
+         stateMap.mineGrid[row-1][col-1]++
+      }
+      if(checkBounds(row-1, col) && stateMap.mineGrid[row-1][col] != -1) {
+         stateMap.mineGrid[row-1][col]++
+      }
+      if(checkBounds(row-1, col+1) && stateMap.mineGrid[row-1][col+1] != -1) {
+         stateMap.mineGrid[row-1][col+1]++
+      }
+      if(checkBounds(row, col+1) && stateMap.mineGrid[row][col+1] != -1) {
+         stateMap.mineGrid[row][col+1]++
+      }
+      if(checkBounds(row+1, col+1) && stateMap.mineGrid[row+1][col+1] != -1) {
+         stateMap.mineGrid[row+1][col+1]++
+      }
+      if(checkBounds(row+1, col) && stateMap.mineGrid[row+1][col] != -1) {
+         stateMap.mineGrid[row+1][col]++
+      }
+      if(checkBounds(row+1, col-1) && stateMap.mineGrid[row+1][col-1] != -1) {
+         stateMap.mineGrid[row+1][col-1]++
+      }
+      if(checkBounds(row, col-1) && stateMap.mineGrid[row][col-1] != -1) {
+         stateMap.mineGrid[row][col-1]++
+      }
+   };
+   // End Utility /incrementNeighbors/
+
+   // Begin Utility /checkBounds/
+   checkBounds = (row, col) => {
+      return (row < configMap.mineFieldNumRows)
+          && (row >= 0)
+          && (col < configMap.mineFieldNumCols)
+          && (col >= 0);
+   };
+   // End Utility /checkBounds/
+
+   // Begin Utility /getRandomInt/
+   getRandomInt = (max) => {
+      return Math.floor(Math.random() * max);
+   };
+   // End Utility /getRandomInt/
+
    // -------- END UTILITY METHODS -------- //
 
    
@@ -88,7 +166,7 @@ spa.minesweeper = (function() {
    // End DOM method /setElementMap/
 
    // Begin DOM method /populateMineField/
-   populateMineField = () => {
+   createMineSpaces = () => {
       let $mine_space;
 
       // Set mine field row and cols
@@ -109,7 +187,7 @@ spa.minesweeper = (function() {
       }
    };
    // End DOM method /populateMineField/
-   
+
    // -------- END DOM METHODS -------- //
 
    
@@ -150,10 +228,14 @@ spa.minesweeper = (function() {
    // Throws    : none
    initModule = ($container) => {
       stateMap.$container = $container;
-      $container.innerHTML = configMap.mainHtml;
-      setElementMap();
+      stateMap.gameTime   = 0;
+      stateMap.mineCount  = configMap.mineFieldNumMines;
 
-      populateMineField();
+      $container.innerHTML = configMap.mainHtml;
+      
+      setElementMap();
+      createMineSpaces();
+      populateMineGrid();
 
       return true;
    };
