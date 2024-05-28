@@ -42,18 +42,64 @@ spa.minesweeper = (function() {
    // End Maps/Objects
    
    // Methods
-   let setElementMap;
+   let adjustScoreboardMineCount;
+   let checkBounds;
+   let configModule;
    let createMineSpaces;
-   let populateMineGrid;
    let getRandomInt;
    let incrementNeighbors;
-   let checkBounds;
+   let incrementScoreboardTimer;
    let initModule;
-   let configModule;
+   let populateMineGrid;
+   let setElementMap;
+   let setModuleContainer;
+   let setScoreboardMineCount;
+   let setScoreboardTimer;
    let timer;
    // End Methods
 
    // -------- END MODULE SCOPE VARIABLES -------- //
+
+
+
+   // -------- BEGIN STATE MANAGEMENT METHODS -------- //
+
+   // Begin Manager /incrementScoreboardTimer/
+   incrementScoreboardTimer = () => {
+      stateMap.gameTime++;
+      elementMap.$timer.innerHTML = stateMap.gameTime;
+   };
+   // End Manager /incrementScoreboardTimer/
+
+   // Begin Manager /setScoreboardTimer/
+   setScoreboardTimer = (time) => {
+      stateMap.gameTime = time;
+      elementMap.$timer.innerHTML = stateMap.gameTime;
+   };
+   // End Manager /setScoreboardTimer/
+   
+   // Begin Manager /adjustScoreboardMineCount/
+   adjustScoreboardMineCount = (delta) => {
+      stateMap.mineCount += delta;
+      elementMap.$mine_count.innerHTML = stateMap.mineCount; 
+   };
+   // End Manager /incrementMines/
+
+   // Begin Manager /setScoreboardMineCount/
+   setScoreboardMineCount = (val) => {
+      stateMap.mineCount = val
+      elementMap.$mine_count.innerHTML = stateMap.mineCount;
+   };
+   // End Manager /setScoreboardMineCount/
+
+   // Begin Manager /setModuleContainer/
+   setModuleContainer = ($container) => {
+      stateMap.$container = $container;
+      stateMap.$container.innerHTML = configMap.mainHtml;
+   };
+   // End Manager /setModuleContainer/
+
+   // -------- BEGIN STATE MANAGEMENT METHODS -------- //
 
 
 
@@ -80,8 +126,6 @@ spa.minesweeper = (function() {
          stateMap.mineGrid[row][col] = -1;
          incrementNeighbors(row, col);
       }
-
-      console.log(stateMap.mineGrid);
    };
    // End Utility /populateMineGrid/
 
@@ -187,10 +231,7 @@ spa.minesweeper = (function() {
    // -------- BEGIN EVENT HANDLERS -------- //
 
    // Begin Interval /timer/
-   timer = setInterval(() => {
-      stateMap.gameTime++;
-      elementMap.$timer.innerHTML = stateMap.gameTime;
-   }, 1000);
+   timer = setInterval(incrementScoreboardTimer, 1000);
    // End Interval /timer/
 
    // -------- END EVENT HANDLERS -------- //
@@ -227,13 +268,17 @@ spa.minesweeper = (function() {
    // Returns   : true
    // Throws    : none
    initModule = ($container) => {
-      stateMap.$container = $container;
-      stateMap.gameTime   = 0;
-      stateMap.mineCount  = configMap.mineFieldNumMines;
+      // Set container for module
+      setModuleContainer($container);
 
-      $container.innerHTML = configMap.mainHtml;
-      
+      // Set element map with relevant elements
       setElementMap();
+
+      // Set state values
+      setScoreboardTimer(0);
+      setScoreboardMineCount(configMap.mineFieldNumMines);
+
+      // Following initialization functions
       createMineSpaces();
       populateMineGrid();
 
