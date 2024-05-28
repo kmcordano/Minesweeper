@@ -78,7 +78,7 @@ spa.shell = (function() {
       spa.minesweeper.configModule({
          mineFieldNumRows  : 9,
          mineFieldNumCols  : 9,
-         mineFieldNumMines : 10
+         mineFieldNumMines : 10,
       });
       spa.minesweeper.initModule(elementMap.$main_content);
    };

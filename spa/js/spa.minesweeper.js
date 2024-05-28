@@ -10,7 +10,7 @@ spa.minesweeper = (function() {
 
    // Begin Maps/Objects
    let configMap = {
-      main_html : String()
+      mainHtml : String()
          + '<div class="spa-minesweeper-container">'
             + '<h1>MineSweeper</h1>'
             + '<div class="spa-minesweeper-gameboard">'
@@ -20,31 +20,6 @@ spa.minesweeper = (function() {
                   + '<div class="spa-minsweeper-scoreboard-timer"></div>'
                + '</div>'
                + '<div class="spa-minesweeper-mine-field">'
-                  + '<div class="spa-minesweeper-mine-field-space"></div>'
-                  + '<div class="spa-minesweeper-mine-field-space"></div>'
-                  + '<div class="spa-minesweeper-mine-field-space"></div>'
-                  + '<div class="spa-minesweeper-mine-field-space"></div>'
-                  + '<div class="spa-minesweeper-mine-field-space"></div>'
-                  + '<div class="spa-minesweeper-mine-field-space"></div>'
-                  + '<div class="spa-minesweeper-mine-field-space"></div>'
-                  + '<div class="spa-minesweeper-mine-field-space"></div>'
-                  + '<div class="spa-minesweeper-mine-field-space"></div>'
-                  + '<div class="spa-minesweeper-mine-field-space"></div>'
-                  + '<div class="spa-minesweeper-mine-field-space"></div>'
-                  + '<div class="spa-minesweeper-mine-field-space"></div>'
-                  + '<div class="spa-minesweeper-mine-field-space"></div>'
-                  + '<div class="spa-minesweeper-mine-field-space"></div>'
-                  + '<div class="spa-minesweeper-mine-field-space"></div>'
-                  + '<div class="spa-minesweeper-mine-field-space"></div>'
-                  + '<div class="spa-minesweeper-mine-field-space"></div>'
-                  + '<div class="spa-minesweeper-mine-field-space"></div>'
-                  + '<div class="spa-minesweeper-mine-field-space"></div>'
-                  + '<div class="spa-minesweeper-mine-field-space"></div>'
-                  + '<div class="spa-minesweeper-mine-field-space"></div>'
-                  + '<div class="spa-minesweeper-mine-field-space"></div>'
-                  + '<div class="spa-minesweeper-mine-field-space"></div>'
-                  + '<div class="spa-minesweeper-mine-field-space"></div>'
-                  + '<div class="spa-minesweeper-mine-field-space"></div>'
                +'</div>'
             + '</div>'
          + '</div>',
@@ -58,7 +33,7 @@ spa.minesweeper = (function() {
       mineFieldNumMines : 10
    };
    let stateMap = { 
-      $container : null,
+      $container : null
    };
    let elementMap = {};
    // End Maps/Objects
@@ -83,8 +58,11 @@ spa.minesweeper = (function() {
    // Begin DOM method /setElementMap/
    setElementMap = () => {
       let $container = stateMap.$container;
+      let $mine_field = 
+         $container.querySelector('.spa-minesweeper-mine-field');
       elementMap = {
-         $container : $container
+         $container : $container,
+         $mine_field : $mine_field
       };
    };
    // End DOM method /setElementMap/
@@ -116,6 +94,7 @@ spa.minesweeper = (function() {
          settableMap : configMap.settableMap,
          configMap   : configMap
       });
+
       return true;
    };
    // End public method /configModule/
@@ -127,9 +106,30 @@ spa.minesweeper = (function() {
    // Returns   : true
    // Throws    : none
    initModule = ($container) => {
+      let $mine_space;
+
       stateMap.$container = $container;
-      $container.innerHTML = configMap.main_html;
+      $container.innerHTML = configMap.mainHtml;
       setElementMap();
+
+      // Set mine field row and cols
+      elementMap.$mine_field.style.gridTemplateRows 
+         = `repeat(${configMap.mineFieldNumRows}, 1fr)`;
+      elementMap.$mine_field.style.gridTemplateColumns
+         = `repeat(${configMap.mineFieldNumCols}, 1fr)`;
+
+      // Fill mine field with spaces
+      for(let i = 0; 
+          i < configMap.mineFieldNumCols * configMap.mineFieldNumRows;
+          i++) {
+            //'<div class="spa-minesweeper-mine-field-space"></div>'
+            $mine_space = document.createElement('div');
+            $mine_space.classList
+               .add('spa-minesweeper-mine-field-space');
+
+            elementMap.$mine_field.appendChild($mine_space);
+     }
+
       return true;
    };
    // End public method /initModule/
