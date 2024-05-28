@@ -42,10 +42,11 @@ spa.minesweeper = (function() {
    // End Maps/Objects
    
    // Methods
+   let addEventListeners;
    let adjustScoreboardMineCount;
    let checkBounds;
    let configModule;
-   let createMineSpaces;
+   let getMineAt;
    let getRandomInt;
    let incrementNeighbors;
    let incrementScoreboardTimer;
@@ -56,6 +57,7 @@ spa.minesweeper = (function() {
    let setScoreboardMineCount;
    let setScoreboardTimer;
    let timer;
+   let uncoverSpaces;
    // End Methods
 
    // -------- END MODULE SCOPE VARIABLES -------- //
@@ -63,6 +65,12 @@ spa.minesweeper = (function() {
 
 
    // -------- BEGIN STATE MANAGEMENT METHODS -------- //
+
+   // Begin Manager /getMineGrid/
+   getMineAt = (row, col) => {
+      return stateMap.mineGrid[row][col];
+   };
+   // End Manager /getMineGrid/
 
    // Begin Manager /incrementScoreboardTimer/
    incrementScoreboardTimer = () => {
@@ -104,6 +112,17 @@ spa.minesweeper = (function() {
 
 
    // -------- BEGIN UTILITY METHODS -------- //
+
+   // Begin Utility /addEventListeners/
+   addEventListeners = () => {
+      let id = 0;
+      elementMap.$mine_spaces.forEach((space) => {
+         space.id = id++;
+         space.addEventListener('click', uncoverSpaces);
+         // space.addEventListener('contextmenu', toggleFlag);
+      })
+   };
+   // End Utility /addEventListeners/
    
    // Begin Utility /populateMineGrid/
    populateMineGrid = () => {
@@ -182,53 +201,126 @@ spa.minesweeper = (function() {
    // Begin DOM method /setElementMap/
    setElementMap = () => {
       let $container = stateMap.$container;
-      let $mine_field = 
-         $container.querySelector('.spa-minesweeper-mine-field');
       let $timer = 
          $container.querySelector('.spa-minesweeper-scoreboard-timer');
       let $result = 
          $container.querySelector('.spa-minesweeper-scoreboard-result');
       let $mine_count = 
          $container.querySelector('.spa-minesweeper-scoreboard-mine-count');
-
-      elementMap = {
-         $container  : $container,
-         $timer      : $timer,
-         $result     : $result,
-         $mine_count : $mine_count,
-         $mine_field : $mine_field
-      };
-   };
-   // End DOM method /setElementMap/
-
-   // Begin DOM method /populateMineField/
-   createMineSpaces = () => {
+      let $mine_field = 
+         $container.querySelector('.spa-minesweeper-mine-field');
+      let $mine_spaces = new Array(
+         configMap.mineFieldNumCols * configMap.mineFieldNumRows
+      );
       let $mine_space;
 
       // Set mine field row and cols
-      elementMap.$mine_field.style.gridTemplateRows 
+      $mine_field.style.gridTemplateRows 
          = `repeat(${configMap.mineFieldNumRows}, 1fr)`;
-      elementMap.$mine_field.style.gridTemplateColumns
+      $mine_field.style.gridTemplateColumns
          = `repeat(${configMap.mineFieldNumCols}, 1fr)`;
 
       // Fill mine field with spaces
       for(let i = 0; 
-          i < configMap.mineFieldNumCols * configMap.mineFieldNumRows;
-          i++) {
-            $mine_space = document.createElement('div');
-            $mine_space.classList
-               .add('spa-minesweeper-mine-field-space');
+         i < configMap.mineFieldNumCols * configMap.mineFieldNumRows;
+         i++
+      ) {
+         $mine_space = document.createElement('div');
+         $mine_space.classList
+            .add('spa-minesweeper-mine-field-space');
 
-            elementMap.$mine_field.appendChild($mine_space);
+         $mine_field.appendChild($mine_space);
+         $mine_spaces[i] = $mine_space;
       }
+
+      elementMap = {
+         $container   : $container,
+         $timer       : $timer,
+         $result      : $result,
+         $mine_count  : $mine_count,
+         $mine_field  : $mine_field,
+         $mine_spaces : $mine_spaces
+      };
    };
-   // End DOM method /populateMineField/
+   // End DOM method /setElementMap/
 
    // -------- END DOM METHODS -------- //
 
    
    
    // -------- BEGIN EVENT HANDLERS -------- //
+
+   // Begin Event /uncoverSpaces/
+   uncoverSpaces = (event) => {
+      let id = event.target.id;
+      let queue = new Array();
+      let at;
+      let numMines;
+      let space;
+
+      console.log(event);
+
+      queue.push([
+         Math.floor(id / configMap.mineFieldNumCols),
+         id % configMap.mineFieldNumCols
+      ]);
+
+      while(queue.length > 0) {
+         at = queue.shift();
+         numMines = getMineAt(at[0], at[1]);
+         space = elementMap.$mine_spaces[
+            (at[0] * configMap.mineFieldNumCols) + at[1]
+         ];
+
+         if(space.classList.contains('spa-minesweeper-uncovered')
+         || space.classList.contains('spa-minesweeper-flag')
+         ) {
+            continue;
+         }
+
+         space.classList.add('spa-minesweeper-uncovered');
+         if(numMines > 0) {
+            space.innerHTML = numMines.toString();
+            space.classList.add('tc' + numMines);
+         }
+         else if(numMines === -1) {
+            space.classList.add('spa-minesweeper-mine-clicked');
+            //endGame(false);
+         }
+
+         if(numMines === 0) {
+            if(checkBounds(at[0]-1, at[1]-1)) {
+               queue.push([at[0]-1, at[1]-1]);
+            }
+            if(checkBounds(at[0]-1, at[1])) {
+               queue.push([at[0]-1, at[1]]);
+            }
+            if(checkBounds(at[0]-1, at[1]+1)) {
+               queue.push([at[0]-1, at[1]+1]);
+            }
+            if(checkBounds(at[0], at[1]+1)) {
+               queue.push([at[0], at[1]+1]);
+            }
+            if(checkBounds(at[0]+1, at[1]+1)) {
+               queue.push([at[0]+1, at[1]+1]);
+            }
+            if(checkBounds(at[0]+1, at[1])) {
+               queue.push([at[0]+1, at[1]]);
+            }
+            if(checkBounds(at[0]+1, at[1]-1)) {
+               queue.push([at[0]+1, at[1]-1]);
+            }
+            if(checkBounds(at[0], at[1]-1)) {
+               queue.push([at[0], at[1]-1]);
+            }
+         }
+
+         // if(allUncovered()) {
+         //    endGame(true);
+         // }
+      }
+   };
+   // End Event /uncoverSpaces/
 
    // Begin Interval /timer/
    timer = setInterval(incrementScoreboardTimer, 1000);
@@ -268,10 +360,8 @@ spa.minesweeper = (function() {
    // Returns   : true
    // Throws    : none
    initModule = ($container) => {
-      // Set container for module
+      // Create HTML elements required in module
       setModuleContainer($container);
-
-      // Set element map with relevant elements
       setElementMap();
 
       // Set state values
@@ -279,8 +369,8 @@ spa.minesweeper = (function() {
       setScoreboardMineCount(configMap.mineFieldNumMines);
 
       // Following initialization functions
-      createMineSpaces();
       populateMineGrid();
+      addEventListeners();
 
       return true;
    };
