@@ -11,7 +11,7 @@ spa.minesweeper = (function() {
    // Begin Maps/Objects
    let configMap = {
       mainHtml : String()
-         + '<div class="spa-minesweeper-container">'
+         + '<div class="spa-minesweeper-container" oncontextmenu="return false">'
             + '<h1>MineSweeper</h1>'
             + '<div class="spa-minesweeper-gameboard">'
                + '<div class="spa-minesweeper-scoreboard">'
@@ -44,8 +44,11 @@ spa.minesweeper = (function() {
    // Methods
    let addEventListeners;
    let adjustScoreboardMineCount;
+   let allUncovered;
    let checkBounds;
+   let clearClickListeners;
    let configModule;
+   let endGame;
    let getMineAt;
    let getRandomInt;
    let incrementNeighbors;
@@ -57,6 +60,8 @@ spa.minesweeper = (function() {
    let setScoreboardMineCount;
    let setScoreboardTimer;
    let timer;
+   let toggleFlag;
+   let uncoverMines;
    let uncoverSpaces;
    // End Methods
 
@@ -113,13 +118,75 @@ spa.minesweeper = (function() {
 
    // -------- BEGIN UTILITY METHODS -------- //
 
+   // Begin Utility /uncoverMines/
+   uncoverMines = () => {
+      elementMap.$mine_spaces.forEach((space) => {
+         if(getMineAt(
+            Math.floor(space.id / configMap.mineFieldNumCols),
+            space.id % configMap.mineFieldNumCols
+            ) === -1
+         ) {
+            space.classList.remove('spa-minesweeper-flag');
+            space.classList.add('spa-minesweeper-uncovered');
+            space.classList.add('spa-minesweeper-mine');
+         }
+      });
+   }; 
+   // End Utility /uncoverMines/
+
+   // Begin Utility /clearClickListeners/
+   clearClickListeners = () => {
+      elementMap.$mine_spaces.forEach((space) => {
+         space.removeEventListener('click', uncoverSpaces);
+         space.removeEventListener('contextmenu', toggleFlag);
+      });
+   }; 
+   // End Utility /clearClickListeners/
+
+   // Begin Utility /endGame/
+   endGame = (won) => {
+      clearInterval(timer);
+      if(won) {
+         elementMap.$result.classList.add('win');
+         elementMap.$result.innerHTML = 'WIN';
+      }
+      else {
+         elementMap.$result.classList.add('loss');
+         elementMap.$result.innerHTML = 'LOSS';
+         uncoverMines();
+      }
+      clearClickListeners();
+   };
+   // End Utility /endGame/
+
+   // Begin Utility /allUncovered/
+   allUncovered = () => {
+      let completed = true;
+      
+      elementMap.$mine_spaces.forEach((space) => {
+         if(
+            !space.classList.contains('spa-minesweeper-flag')
+         && !space.classList.contains('spa-minesweeper-uncovered')
+         ) {
+            completed = false;
+         }
+      });
+
+      if(stateMap.mineCount !== 0) {
+         completed = false;
+      }
+
+      return completed;
+   };
+   // End Utility /allUncovered/
+
    // Begin Utility /addEventListeners/
    addEventListeners = () => {
       let id = 0;
       elementMap.$mine_spaces.forEach((space) => {
          space.id = id++;
          space.addEventListener('click', uncoverSpaces);
-         // space.addEventListener('contextmenu', toggleFlag);
+         space.addEventListener('contextmenu', toggleFlag);
       })
    };
    // End Utility /addEventListeners/
@@ -258,8 +325,6 @@ spa.minesweeper = (function() {
       let numMines;
       let space;
 
-      console.log(event);
-
       queue.push([
          Math.floor(id / configMap.mineFieldNumCols),
          id % configMap.mineFieldNumCols
@@ -281,11 +346,11 @@ spa.minesweeper = (function() {
          space.classList.add('spa-minesweeper-uncovered');
          if(numMines > 0) {
             space.innerHTML = numMines.toString();
-            space.classList.add('tc' + numMines);
+            space.classList.add('spa-minesweeper-tc' + numMines);
          }
          else if(numMines === -1) {
             space.classList.add('spa-minesweeper-mine-clicked');
-            //endGame(false);
+            endGame(false);
          }
 
          if(numMines === 0) {
@@ -315,12 +380,34 @@ spa.minesweeper = (function() {
             }
          }
 
-         // if(allUncovered()) {
-         //    endGame(true);
-         // }
+         if(allUncovered()) {
+            endGame(true);
+         }
       }
    };
    // End Event /uncoverSpaces/
+
+   // Begin Event /toggleFlag/
+   toggleFlag = (event) => {
+      let id = event.target.id;
+      let space = elementMap.$mine_spaces[id];
+
+      if(!space.classList.contains('spa-minesweeper-uncovered ')) {
+         if(space.classList.contains('spa-minesweeper-flag')) {
+            space.classList.remove('spa-minesweeper-flag');
+            adjustScoreboardMineCount(1);
+         }
+         else {
+            space.classList.add('spa-minesweeper-flag');
+            adjustScoreboardMineCount(-1);
+         }
+      }
+
+      if(allUncovered()) {
+         endGame(true);
+      }
+   };
+   // End Event /toggleFlag/
 
    // Begin Interval /timer/
    timer = setInterval(incrementScoreboardTimer, 1000);
