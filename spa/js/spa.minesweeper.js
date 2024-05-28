@@ -61,10 +61,29 @@ spa.minesweeper = (function() {
       let $container = stateMap.$container;
       let $mine_field = 
          $container.querySelector('.spa-minesweeper-mine-field');
+      let $timer = 
+         $container.querySelector('.spa-minesweeper-scoreboard-timer');
+      let $result = 
+         $container.querySelector('.spa-minesweeper-scoreboard-result');
+      let $mine_count = 
+         $container.querySelector('.spa-minesweeper-scoreboard-mine-count');
+
       elementMap = {
-         $container : $container,
+         $container  : $container,
+         $timer      : $timer,
+         $result     : $result,
+         $mine_count : $mine_count,
          $mine_field : $mine_field
       };
+
+      for(let $element in elementMap) {
+         if(!$element) {
+            throw(spa.util.makeError(
+               'Bad element',
+               `Element ${$element} could not be found`
+            ));
+         }
+      }
    };
    // End DOM method /setElementMap/
 
