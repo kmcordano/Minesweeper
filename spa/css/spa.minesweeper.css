@@ -46,9 +46,9 @@
    align-items : center;
 }
 
-.spa-minsweeper-scoreboard-mine-count,
-.spa-minsweeper-scoreboard-result,
-.spa-minsweeper-scoreboard-timer {
+.spa-minesweeper-scoreboard-mine-count,
+.spa-minesweeper-scoreboard-result,
+.spa-minesweeper-scoreboard-timer {
    width : 30%;
    height : 60%;
    margin : 0 3%;
