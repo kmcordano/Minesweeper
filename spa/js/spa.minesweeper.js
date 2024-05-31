@@ -60,6 +60,7 @@ spa.minesweeper = (function() {
    let initModule;
    let populateMineGrid;
    let setElementMap;
+   let setMineField;
    let setModuleContainer;
    let setScoreboardMineCount;
    let setScoreboardTimer;
@@ -280,29 +281,7 @@ spa.minesweeper = (function() {
          $container.querySelector('.spa-minesweeper-scoreboard-mine-count');
       let $mine_field = 
          $container.querySelector('.spa-minesweeper-mine-field');
-      let $mine_spaces = new Array(
-         configMap.mineFieldNumCols * configMap.mineFieldNumRows
-      );
-      let $mine_space;
-
-      // Set mine field row and cols
-      $mine_field.style.gridTemplateRows 
-         = `repeat(${configMap.mineFieldNumRows}, 1fr)`;
-      $mine_field.style.gridTemplateColumns
-         = `repeat(${configMap.mineFieldNumCols}, 1fr)`;
-
-      // Fill mine field with spaces
-      for(let i = 0; 
-         i < configMap.mineFieldNumCols * configMap.mineFieldNumRows;
-         i++
-      ) {
-         $mine_space = document.createElement('div');
-         $mine_space.classList
-            .add('spa-minesweeper-mine-field-space');
-
-         $mine_field.appendChild($mine_space);
-         $mine_spaces[i] = $mine_space;
-      }
+      let $mine_spaces = setMineField($mine_field);
 
       elementMap = {
          $container   : $container,
@@ -314,6 +293,35 @@ spa.minesweeper = (function() {
       };
    };
    // End DOM method /setElementMap/
+
+   // Start DOM method /setMineField/
+   setMineField = ($mine_field) => {
+      let $mine_spaces = new Array(
+         configMap.mineFieldNumCols * configMap.mineFieldNumRows
+      );
+      let $mine_space;
+
+      $mine_field.style.gridTemplateRows 
+         = `repeat(${configMap.mineFieldNumRows}, 1fr)`;
+      $mine_field.style.gridTemplateColumns
+         = `repeat(${configMap.mineFieldNumCols}, 1fr)`;
+
+      for(
+         let i = 0; 
+         i < configMap.mineFieldNumCols * configMap.mineFieldNumRows;
+         i++
+      ) {
+         $mine_space = document.createElement('div');
+         $mine_space.classList
+            .add('spa-minesweeper-mine-field-space');
+
+         $mine_field.appendChild($mine_space);
+         $mine_spaces[i] = $mine_space;
+      }
+
+      return $mine_spaces;
+   };
+   // End DOM method /setMineField/
 
    // -------- END DOM METHODS -------- //
 
