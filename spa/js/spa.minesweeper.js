@@ -365,7 +365,6 @@ spa.minesweeper = (function() {
 
    // Begin Event /uncoverSpaces/
    uncoverSpaces = (event) => {
-      console.log('Click');
       let id = event.target.id;
       let queue = new Array();
       let at;
