@@ -161,3 +161,31 @@
    .spa-minesweeper-btn:active {
       transform : scale(0.98);
    }
+
+.spa-minesweeper-settings-modal {
+   width : 500px;;
+   background-color : var(--bgGray);
+   position : absolute;
+
+   border              : 0.25em solid #eee;
+   border-right-color  : var(--darkBorderColor);
+   border-bottom-color : var(--darkBorderColor);
+
+   padding : 10px;
+   top : 25%;
+
+   text-align : center;
+}
+
+.spa-minesweeper-settings-modal p {
+   display : inline-block;
+   padding-right : 1em;
+}
+
+.spa-minesweeper-settings-modal input {
+   width : clamp(3em, 10% , 8em);
+   padding : 0.1em;
+   outline: none;
+   font : inherit;
+   font-size : 8px;
+}

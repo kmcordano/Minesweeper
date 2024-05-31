@@ -25,16 +25,42 @@ spa.minesweeper = (function() {
             + '<div class="spa-minesweeper-btns">'
                + '<div class="spa-minesweeper-new-game spa-minesweeper-btn">New Game</div>'
                + '<div class="spa-minesweeper-settings spa-minesweeper-btn">Settings</div>'
-            + '</div>'      
+            + '</div>' 
+            + '<div class="spa-minesweeper-settings-modal">'
+               + '<form>'
+                  + '<h2>game settings</h2>'
+                  + '<br>'
+                  + '<p>number of rows :</p>'
+                  + '<input type="text" class="spa-minesweeper-settings-modal-num-rows">'
+                  + '<p>number of columns :</p>'
+                  + '<input type="text" class="spa-minesweeper-settings-modal-num-cols">'
+                  + '<p>number of mines :</p>'
+                  + '<input type="text" class="spa-minesweeper-settings-modal-num-mines">'
+                  + '<br><br>'
+                  + '<div class="spa-minesweeper-settings-modal-submit spa-minesweeper-btn">New Game</div>'
+               + '</form>'
+            + '</div>'     
          + '</div>',
       settableMap : {
          mineFieldNumRows  : true,
          mineFieldNumCols  : true,
-         mineFieldNumMines : true
+         mineFieldNumMines : true,
+         DEFAULT_NUM_ROWS  : false,
+         DEFAULT_NUM_COLS  : false,
+         DEFAULT_NUM_MINES : false,
+         MAX_NUM_COLS      : false,
+         MAX_NUM_ROWS      : false,
+         MAX_NUM_MINES     : false
       },
       mineFieldNumRows  : 9,
       mineFieldNumCols  : 9,
-      mineFieldNumMines : 10
+      mineFieldNumMines : 10,
+      DEFAULT_NUM_ROWS  : 9,
+      DEFAULT_NUM_COLS  : 9,
+      DEFAULT_NUM_MINES : 10,
+      MAX_NUM_ROWS      : 99,
+      MAX_NUM_COLS      : 99,
+      MAX_NUM_MINES     : 2200
    };
    let stateMap = { 
       $container : null,
@@ -61,6 +87,7 @@ spa.minesweeper = (function() {
    let initModule;
    let populateMineGrid;
    let restartGame;
+   let restartTimer;
    let setElementMap;
    let setMineField;
    let setModuleContainer;
@@ -144,7 +171,7 @@ spa.minesweeper = (function() {
       elementMap.$mine_spaces = setMineField(elementMap.$mine_field);
       populateMineGrid();
 
-      startTimer();
+      restartTimer();
       setScoreboardMineCount(configMap.mineFieldNumMines);
       elementMap.$result.classList.forEach((classItem) => {
          elementMap.$result.classList.remove(classItem);
@@ -455,9 +482,16 @@ spa.minesweeper = (function() {
    };
    // End Event /toggleFlag/
 
+   // Begin Interval /restartTimer/
+   restartTimer = () => {
+      stopTimer();
+      setScoreboardTimer(0);
+      startTimer();
+   };
+   // End Interval /restartTimer/
+
    // Begin Interval /startTimer/
    startTimer = () => {
-      setScoreboardTimer(0);
       timer = setInterval(incrementScoreboardTimer, 1000);
    };
    // End Interval /startTimer/
@@ -507,7 +541,7 @@ spa.minesweeper = (function() {
       setElementMap();
 
       // Set state values
-      startTimer();
+      restartTimer();
       setScoreboardMineCount(configMap.mineFieldNumMines);
 
       // Following initialization functions
