@@ -14,14 +14,18 @@
 }
 
 .spa-minesweeper-container {
-   display : flex;
+   display        : flex;
    flex-direction : column;
-   align-items : center;
+   align-items    : center;
 
-   width : 100%;
+   width  : 100%;
    height : 100%;
 
    font-family : 'Minesweeper';
+}
+
+.spa-minesweeper-title {
+   margin : 10px;
 }
 
 .spa-minesweeper-gameboard {
@@ -31,30 +35,33 @@
 
    background-color : var(--bgGray);
 
-   padding : 0.5em;
+   margin-bottom : 10px;
+   padding       : 0.5em;
 }
 
 .spa-minesweeper-scoreboard {
    height : 3em;
-   border : 0.25em solid #eee;
-   border-top-color : var(--darkBorderColor);
+
+   border            : 0.25em solid #eee;
+   border-top-color  : var(--darkBorderColor);
    border-left-color : var(--darkBorderColor);
+   
    margin-bottom : 0.5em;
 
-   display : flex;
+   display         : flex;
    justify-content : space-between;
-   align-items : center;
+   align-items     : center;
 }
 
 .spa-minesweeper-scoreboard-mine-count,
 .spa-minesweeper-scoreboard-result,
 .spa-minesweeper-scoreboard-timer {
-   width : 30%;
+   width  : 30%;
    height : 60%;
    margin : 0 3%;
 
-   display : flex;
-   align-items : center;
+   display         : flex;
+   align-items     : center;
    justify-content : center;
 }
 
@@ -67,41 +74,43 @@
 }
 
 .spa-minesweeper-mine-field {
-   border : 0.25em solid #eee;
-   border-top-color : var(--darkBorderColor);
+   border            : 0.25em solid #eee;
+   border-top-color  : var(--darkBorderColor);
    border-left-color : var(--darkBorderColor);
 
    display : grid;
 }
 
 .spa-minesweeper-mine-field-space {
-   width : 2em;
+   width  : 2em;
    height : 2em;
 
-   border : 0.25em solid #eee;
-   border-right-color : var(--darkBorderColor);
+   border              : 0.25em solid #eee;
+   border-right-color  : var(--darkBorderColor);
    border-bottom-color : var(--darkBorderColor);
+   
    background-color : var(--bgGray);
 
    box-sizing : border-box;
 
-   display : flex;
-   align-items : center;
+   display         : flex;
+   align-items     : center;
    justify-content : center;
 
    cursor : pointer;
 }
    .spa-minesweeper-mine-field-space.spa-minesweeper-uncovered {
       cursor : default;
-      border : none;
+
+      border        : none;
       border-bottom : 2px solid var(--darkBorderColor);
-      border-right : 2px solid var(--darkBorderColor);
+      border-right  : 2px solid var(--darkBorderColor);
    }
 
 .spa-minesweeper-flag,
 .spa-minesweeper-mine,
 .spa-minesweeper-mine-clicked {
-   background-size : cover;
+   background-size   : cover;
    background-repeat : no-repeat;
 }
    .spa-minesweeper-flag {
@@ -138,3 +147,17 @@
 .spa-minesweeper-tc8 {
    color : rgb(123,123,123);
 }
+
+.spa-minesweeper-btn {
+   background-color : var(--bgGray);
+   margin : 0px 5px;
+   padding : 5px 10px;
+   display : inline-block;
+   border            : 0.25em solid #eee;
+   border-bottom-color  : var(--darkBorderColor);
+   border-right-color : var(--darkBorderColor);
+   cursor : pointer;
+}
+   .spa-minesweeper-btn:active {
+      transform : scale(0.98);
+   }

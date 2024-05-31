@@ -12,7 +12,7 @@ spa.minesweeper = (function() {
    let configMap = {
       mainHtml : String()
          + '<div class="spa-minesweeper-container" oncontextmenu="return false">'
-            + '<h1>MineSweeper</h1>'
+            + '<h1 class="spa-minesweeper-title">MineSweeper</h1>'
             + '<div class="spa-minesweeper-gameboard">'
                + '<div class="spa-minesweeper-scoreboard">'
                   + '<div class="spa-minesweeper-scoreboard-mine-count"></div>'
@@ -22,6 +22,10 @@ spa.minesweeper = (function() {
                + '<div class="spa-minesweeper-mine-field">'
                +'</div>'
             + '</div>'
+            + '<div class="spa-minesweeper-btns">'
+               + '<div class="spa-minesweeper-new-game spa-minesweeper-btn">New Game</div>'
+               + '<div class="spa-minesweeper-settings spa-minesweeper-btn">Settings</div>'
+            + '</div>'      
          + '</div>',
       settableMap : {
          mineFieldNumRows  : true,
