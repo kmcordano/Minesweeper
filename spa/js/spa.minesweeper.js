@@ -47,6 +47,7 @@ spa.minesweeper = (function() {
    
    // Methods
    let addEventListeners;
+   let addGameButtons;
    let adjustScoreboardMineCount;
    let allUncovered;
    let checkBounds;
@@ -59,11 +60,14 @@ spa.minesweeper = (function() {
    let incrementScoreboardTimer;
    let initModule;
    let populateMineGrid;
+   let restartGame;
    let setElementMap;
    let setMineField;
    let setModuleContainer;
    let setScoreboardMineCount;
    let setScoreboardTimer;
+   let startTimer;
+   let stopTimer;
    let timer;
    let toggleFlag;
    let uncoverMines;
@@ -123,6 +127,34 @@ spa.minesweeper = (function() {
 
    // -------- BEGIN UTILITY METHODS -------- //
 
+   // Begin Utility /addGameButtons/
+   addGameButtons = () => {
+      elementMap.$new_game.addEventListener('click', restartGame);
+   };
+   // End Utility /addGameButtons/
+
+   // Begin Utility /restartGame/
+   restartGame = () => {
+      clearClickListeners(); 
+
+      while(elementMap.$mine_field.firstChild) {
+         elementMap.$mine_field.removeChild(elementMap.$mine_field.lastChild);
+      }
+
+      elementMap.$mine_spaces = setMineField(elementMap.$mine_field);
+      populateMineGrid();
+
+      startTimer();
+      setScoreboardMineCount(configMap.mineFieldNumMines);
+      elementMap.$result.classList.forEach((classItem) => {
+         elementMap.$result.classList.remove(classItem);
+      });
+      elementMap.$result.innerHTML = '';
+
+      addEventListeners();
+   };
+   // End Utility /restartGame/
+
    // Begin Utility /uncoverMines/
    uncoverMines = () => {
       elementMap.$mine_spaces.forEach((space) => {
@@ -150,7 +182,7 @@ spa.minesweeper = (function() {
 
    // Begin Utility /endGame/
    endGame = (won) => {
-      clearInterval(timer);
+      stopTimer();
       if(won) {
          elementMap.$result.classList.add('win');
          elementMap.$result.innerHTML = 'WIN';
@@ -282,6 +314,7 @@ spa.minesweeper = (function() {
       let $mine_field = 
          $container.querySelector('.spa-minesweeper-mine-field');
       let $mine_spaces = setMineField($mine_field);
+      let $new_game = $container.querySelector('.spa-minesweeper-new-game');
 
       elementMap = {
          $container   : $container,
@@ -289,7 +322,8 @@ spa.minesweeper = (function() {
          $result      : $result,
          $mine_count  : $mine_count,
          $mine_field  : $mine_field,
-         $mine_spaces : $mine_spaces
+         $mine_spaces : $mine_spaces,
+         $new_game    : $new_game
       };
    };
    // End DOM method /setElementMap/
@@ -331,6 +365,7 @@ spa.minesweeper = (function() {
 
    // Begin Event /uncoverSpaces/
    uncoverSpaces = (event) => {
+      console.log('Click');
       let id = event.target.id;
       let queue = new Array();
       let at;
@@ -421,9 +456,18 @@ spa.minesweeper = (function() {
    };
    // End Event /toggleFlag/
 
-   // Begin Interval /timer/
-   timer = setInterval(incrementScoreboardTimer, 1000);
-   // End Interval /timer/
+   // Begin Interval /startTimer/
+   startTimer = () => {
+      setScoreboardTimer(0);
+      timer = setInterval(incrementScoreboardTimer, 1000);
+   };
+   // End Interval /startTimer/
+
+   // Begin Interval /stopTimer/
+   stopTimer = () => {
+      clearInterval(timer);
+   };
+   // End Interval /stopTimer/
 
    // -------- END EVENT HANDLERS -------- //
 
@@ -464,12 +508,13 @@ spa.minesweeper = (function() {
       setElementMap();
 
       // Set state values
-      setScoreboardTimer(0);
+      startTimer();
       setScoreboardMineCount(configMap.mineFieldNumMines);
 
       // Following initialization functions
       populateMineGrid();
       addEventListeners();
+      addGameButtons();
 
       return true;
    };
