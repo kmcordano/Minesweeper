@@ -26,7 +26,7 @@ spa.minesweeper = (function() {
                + '<div class="spa-minesweeper-new-game spa-minesweeper-btn">New Game</div>'
                + '<div class="spa-minesweeper-settings spa-minesweeper-btn">Settings</div>'
             + '</div>' 
-            + '<div class="spa-minesweeper-settings-modal">'
+            + '<div class="spa-minesweeper-settings-modal" style="visibility: hidden">'
                + '<form>'
                   + '<h2>game settings</h2>'
                   + '<br>'
@@ -75,6 +75,7 @@ spa.minesweeper = (function() {
    let addEventListeners;
    let addGameButtons;
    let adjustScoreboardMineCount;
+   let adjustSettings;
    let allUncovered;
    let checkBounds;
    let clearClickListeners;
@@ -157,8 +158,36 @@ spa.minesweeper = (function() {
    // Begin Utility /addGameButtons/
    addGameButtons = () => {
       elementMap.$new_game.addEventListener('click', restartGame);
+      elementMap.$settings.addEventListener('click', adjustSettings);
    };
    // End Utility /addGameButtons/
+
+   // Begin Utility /adjustSettings/
+   adjustSettings = () => {
+      let $container = elementMap.$settings_modal;
+      let $rowInput = 
+         $container.querySelector('.spa-minesweeper-settings-modal-num-rows');
+      let $colInput = 
+         $container.querySelector('.spa-minesweeper-settings-modal-num-cols');
+      let $mineInput =
+         $container.querySelector('.spa-minesweeper-settings-modal-num-mines');
+      let $submit =
+         $container.querySelector('.spa-minesweeper-settings-modal-submit');
+
+      stopTimer();
+      $container.style.visibility = 'visible';
+
+      $submit.addEventListener('click', () => {
+         configMap.mineFieldNumCols  = +$colInput.value;
+         configMap.mineFieldNumRows  = +$rowInput.value;
+         configMap.mineFieldNumMines = +$mineInput.value;
+
+         $container.style.visibility = 'hidden';
+
+         restartGame();
+      });
+   };
+   // End Utility /adjustSettings/
 
    // Begin Utility /restartGame/
    restartGame = () => {
@@ -342,15 +371,21 @@ spa.minesweeper = (function() {
          $container.querySelector('.spa-minesweeper-mine-field');
       let $mine_spaces = setMineField($mine_field);
       let $new_game = $container.querySelector('.spa-minesweeper-new-game');
+      let $settings = 
+         $container.querySelector('.spa-minesweeper-settings');
+      let $settings_modal = 
+         $container.querySelector('.spa-minesweeper-settings-modal');
 
       elementMap = {
-         $container   : $container,
-         $timer       : $timer,
-         $result      : $result,
-         $mine_count  : $mine_count,
-         $mine_field  : $mine_field,
-         $mine_spaces : $mine_spaces,
-         $new_game    : $new_game
+         $container      : $container,
+         $timer          : $timer,
+         $result         : $result,
+         $mine_count     : $mine_count,
+         $mine_field     : $mine_field,
+         $mine_spaces    : $mine_spaces,
+         $new_game       : $new_game,
+         $settings       : $settings,
+         $settings_modal : $settings_modal
       };
    };
    // End DOM method /setElementMap/
